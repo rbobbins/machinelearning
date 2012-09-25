@@ -22,15 +22,6 @@ for i=1:size(test_data)
   end
 
   digit_guesses(i) = min_cost(2);
-
-  % total_tries += 1;
-  % if (min_cost(2) == digits(i))
-  %   total_correct += 1;
-  % end
 end
 
 csvwrite('prediction.csv', digit_guesses);
-
-% total_tries
-% total_correct
-% total_correct/ total_tries
