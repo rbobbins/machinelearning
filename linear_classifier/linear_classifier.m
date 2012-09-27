@@ -1,6 +1,4 @@
-
-
-load('average.mat');
+load('../average.mat');
 test_data = csvread('test.csv', [1, 0, 28000, 783]);
 
 total_tries = 0

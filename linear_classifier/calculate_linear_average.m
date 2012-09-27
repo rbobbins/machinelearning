@@ -8,7 +8,7 @@ function calculate_linear_average()
     % Columns 3:786 are the average pixel values for pixels 1-784, read left to right, top to bottom
     %================================
 
-    data = csvread('train.csv', [1,0,30000,0]); %(:,1) is the actual digit value  
+    data = csvread('../train.csv', [1,0,30000,785]); %(:,1) is the actual digit value  
 
     digits = data(:,1);
     pixels = data(:,2:end);
@@ -16,7 +16,7 @@ function calculate_linear_average()
 
     index = linspace(0, 9, 10);
     results = zeros(10, 785);
-    result = [index', results]; 
+    result = [index', results];
 
     for k=1:size(digits)
       actual = digits(k);
