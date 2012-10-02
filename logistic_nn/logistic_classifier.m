@@ -1,19 +1,17 @@
-function predictValues()
+function logistic_classifier()
     [all_theta] = trainLogisticRegression(50);
     X = csvread('../test.csv', [1,0,28000,784]);
     
     m = size(X, 1);
     num_labels = size(all_theta, 1);
-
-    % p = zeros(size(X, 1), 1);
-
+    
     % Add ones to the X data matrix
     X = [ones(m, 1) X];
 
     A = sigmoid(all_theta * X');
     [p, ip] = max(A);
 
-    csvwrite('logistic_multiclass_results.csv', pred')
+    csvwrite('logistic_multiclass_results.csv', ip')
 end
 
 function [all_theta] = trainLogisticRegression(iter)
@@ -39,8 +37,6 @@ function [all_theta] = trainLogisticRegression(iter)
     initial_theta = zeros(n + 1, 1);
     options = optimset('GradObj', 'on', 'MaxIter', iter);
     theta = fmincg(@(t)(lrCostFunction(t, X, (y == c), lambda)), initial_theta, options);
-    c
-    theta
     all_theta(c,:) = theta;
   end
 end
