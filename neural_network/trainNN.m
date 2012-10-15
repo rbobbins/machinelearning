@@ -1,13 +1,10 @@
-function [Theta1, Theta2] = trainNN(num_training_samples, lambda, ...
+function [Theta1, Theta2] = trainNN(Digits, Pixels, ...
                                     input_layer_size, hidden_layer_size, ...
                                     num_labels)
-    % Useful variables
-    max_iter = 50;
 
-    % Get training samples
-    Data = csvread('../train.csv', [1, 0, num_training_samples, input_layer_size]);
-    Digits = Data(:,1);
-    Pixels = Data(:,2:end);
+    % Useful variables
+    max_iter = 50; % Number of minimizing iterations when training
+    lambda = 1; % Regularization parameter
 
     % Make random initial parameters
     initial_Theta1 = randInitializeWeights(input_layer_size, hidden_layer_size);

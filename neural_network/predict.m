@@ -1,4 +1,4 @@
-function P = predict(Theta1, Theta2, X)
+function P = predict(Theta1, Theta2, X)             
     m = size(X, 1);
     num_labels = size(Theta2, 1);
 
