@@ -2,22 +2,30 @@ function [J grad] = nnCostFunction(nn_params, ...
                                    input_layer_size, ...
                                    hidden_layer_size, ...
                                    num_labels, ...
+                                   num_hidden_layers, ...
                                    X, y, lambda)
-
-    num_hidden_layers = 1;
 
     % Setup some useful variables
     m = size(X, 1);
 
     % Reshape nn_params back into the weight matrices for our neural network
     THETAS = cell(1, num_hidden_layers+1);
+
     THETAS{1} = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
                      hidden_layer_size, (input_layer_size + 1));
-    for i=1:num_hidden_layers
-        THETAS{i+1} = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
-                     num_labels, (hidden_layer_size + 1));
+    num_used_entries = hidden_layer_size * (input_layer_size + 1);
+
+    for i=1:num_hidden_layers-1
+        THETAS{i+1} = reshape(nn_params((num_used_entries+1):(num_used_entries + hidden_layer_size*(hidden_layer_size+1))), ...
+                     hidden_layer_size, (hidden_layer_size + 1));
+        num_used_entries = num_used_entries + hidden_layer_size*(hidden_layer_size+1);
     end
-             
+
+    THETAS{end} = reshape(nn_params((1 + num_used_entries):end), ...
+                 num_labels, (hidden_layer_size + 1));
+
+
+                 
     % Vars to return
     J = 0;
     THETA_GRADS = cell(size(THETAS));
@@ -74,7 +82,13 @@ function [J grad] = nnCostFunction(nn_params, ...
 
 
     % Unroll gradients
-    grad = [THETA_GRADS{1}(:) ; THETA_GRADS{2}(:)];
+    grad = zeros(size(nn_params));
+    index = 0;
+    for j=1:length(THETA_GRADS)
+        len = length(THETA_GRADS{j}(:));
+        grad(index+1 : index+len) = THETA_GRADS{j}(:);
+        index = index + len;
+    end
 end
 
 
