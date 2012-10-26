@@ -23,6 +23,8 @@ function logistic_classifier()
     A = sigmoid(all_theta * X');
     [p, ip] = max(A);
 
+    ip
+
     csvwrite('logistic_multiclass_results_40iters_nlambda.csv', ip')
 end
 

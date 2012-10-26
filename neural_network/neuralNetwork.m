@@ -3,9 +3,9 @@ close all;
 clc;
 
 % Sample sizes
-num_training_samples = 240; % Number should be less than 30000
-num_cv_samples = 80;
-num_test_samples = 80;
+num_training_samples = 2000; % Number should be less than 30000
+num_cv_samples = 500;
+num_test_samples = 500;
 
 % Fixed variables
 input_layer_size = 28 * 28; % Input: each pixel is a feature
@@ -18,8 +18,10 @@ num_labels = 10; % Output: each digit is a label
 % For each of these variables:
     % if a vector is supplied - it will optimize that variable over the supplied values in the vector
     % is a scalar is supplied - it will NOT perform optimization
-% Hidden_layer_sizes = [25 50 100 200];
-Hidden_layer_sizes = 200;
+% Hidden_layer_sizes = [100 150 200];
+% Num_hidden_layers = [1 2];
+Hidden_layer_sizes = 100;
+Num_hidden_layers = 1;
 
 
 
@@ -54,16 +56,18 @@ Test_pixels = Test_data(:,2:end);
 
 
 %% Optimizing params
-fprintf('\n\nOptimizing Parameters...\n');
-if length(Hidden_layer_sizes) > 1
-    hidden_layer_size = optimizeHiddenLayerSize(Hidden_layer_sizes, ...
-                                                Train_digits, Train_pixels, ...
-                                                Cv_digits, Cv_pixels, ...
-                                                input_layer_size, num_labels);
+if length(Hidden_layer_sizes) > 1 || length(Num_hidden_layers) > 1
+    fprintf('Optimizing Parameters...\n');
+    [hidden_layer_size num_hidden_layers] = optimizeHiddenLayers (Hidden_layer_sizes, Num_hidden_layers, ...
+                                                                  Train_digits, Train_pixels, ...
+                                                                  Cv_digits, Cv_pixels, ...
+                                                                  input_layer_size, num_labels);
+    fprintf('\n\nOptimum hidden layer size: %d\n', hidden_layer_size);
+    fprintf('Optimum number of hidden layers: %d\n\n\n', num_hidden_layers);
 else
     hidden_layer_size = Hidden_layer_sizes(1);
+    num_hidden_layers = Num_hidden_layers(1);
 end
-fprintf('Optimum hidden layer size: %d\n', hidden_layer_size);
 
 
 
@@ -74,33 +78,34 @@ fprintf('Optimum hidden layer size: %d\n', hidden_layer_size);
 new_params = struct('num_training_samples', num_training_samples, ...
                 'input_layer_size', input_layer_size, ...
                 'hidden_layer_size', hidden_layer_size, ...
+                'num_hidden_layers', num_hidden_layers, ...
                 'num_labels', num_labels);
 
 try
-    load('weightsAndParams.mat');
+    load ('weightsAndParams.mat');
+    fnames = fieldnames(new_params);
     for i=1:nfields(new_params)
-        field = fieldnames(new_params){i};
+        field = fnames{i};
 
         if new_params.(field) ~= params.(field)
-            fprintf('\n\nTraining Neural Network... \n');
-            [Theta1, Theta2] = trainNN(Train_digits, Train_pixels, ...
-                                       input_layer_size, hidden_layer_size, num_labels);
-            params = new_params;
-            save 'weightsAndParams.mat' params Theta1 Theta2;
+            error ('Foing to catch loop to train network and save weights/params.')
         end
     end
 
 catch
-    fprintf('\n\nTraining Neural Network... \n');
-    [Theta1, Theta2] = trainNN(Train_digits, Train_pixels, ...
-                               input_layer_size, hidden_layer_size, num_labels);
+    fprintf ('Training Neural Network... \n');
+    THETAS = trainNN(Train_digits, Train_pixels, ...
+                               input_layer_size, hidden_layer_size, ...
+                               num_hidden_layers, num_labels);
     params = new_params;
-    save 'weightsAndParams.mat' params Theta1 Theta2;
+    save 'weightsAndParams.mat' params THETAS;
+    fprintf ('\n\n');
 end
 
 
 
+
 %% Testing the network
-fprintf('\n\nTesting Neural Network... \n');
-testNN(Test_digits, Test_pixels, Theta1, Theta2);
+fprintf ('Testing Neural Network... \n');
+testNN(Test_digits, Test_pixels, THETAS);
 
