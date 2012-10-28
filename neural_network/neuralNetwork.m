@@ -1,11 +1,20 @@
+% Accuracy:
+% (Rows: varying size of hidden layer.) Values:
+%    100   150   200
+% (Cols: varying the number of hidden layers.) Values:
+%    1   2
+
+%    0.91740   0.92200   0.92720
+%    0.90320   0.90980   0.90840
+
 clear;
 close all;
 clc;
 
 % Sample sizes
-num_training_samples = 2000; % Number should be less than 30000
-num_cv_samples = 500;
-num_test_samples = 500;
+num_training_samples = 20000; % Number should be less than 30000
+num_cv_samples = 5000;
+num_test_samples = 5000;
 
 % Fixed variables
 input_layer_size = 28 * 28; % Input: each pixel is a feature
@@ -20,7 +29,7 @@ num_labels = 10; % Output: each digit is a label
     % is a scalar is supplied - it will NOT perform optimization
 % Hidden_layer_sizes = [100 150 200];
 % Num_hidden_layers = [1 2];
-Hidden_layer_sizes = 100;
+Hidden_layer_sizes = 200;
 Num_hidden_layers = 1;
 
 
@@ -105,7 +114,9 @@ end
 
 
 
+
+
+
 %% Testing the network
 fprintf ('Testing Neural Network... \n');
 testNN(Test_digits, Test_pixels, THETAS);
-
