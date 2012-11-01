@@ -1,7 +1,7 @@
 
 function calculate_linear_average()
     %================================
-    % Calculates the average image for digits 0-9.
+    % Calculates the average image for digits 0-9. Use for training data.
     % Saves the result in a matrix - result is persisted in file average.mat
     % Column 1 is the actual digit value
     % Column 2 is the number of samples for this digit
@@ -10,9 +10,8 @@ function calculate_linear_average()
 
     data = csvread('../train.csv', [1,0,30000,785]); %(:,1) is the actual digit value  
 
-    digits = data(:,1);
-    pixels = data(:,2:end);
-
+    digits = data(:,1);         %value of digit
+    pixels = data(:,2:end);     %value of pixels 1-784
 
     index = linspace(0, 9, 10);
     results = zeros(10, 785);
