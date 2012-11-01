@@ -1,44 +1,45 @@
 function preprocess()
-  training_data = csvread('train.csv', [1,0,30000,785]); %(:,1) is the actual digit value  
+  % training_data = csvread('train.csv', [1,0,30000,785]); %(:,1) is the actual digit value  
 
-  fprintf('preprocessing training data');
-  for i=1:30000
-    m_orig = reshape(training_data(i, 2:end), [28 28]);
-    m = m_orig';
-    img = mat2gray(m);
+  % fprintf('preprocessing training data\n');
+  % for i=1:30000
+  %   m_orig = reshape(training_data(i, 2:end), [28 28]);
+  %   m = m_orig';
+  %   img = mat2gray(m);
+  %   % img = gray2ind(m ./ 255);
+  %   % imwrite(img, 'foo.png')
+  %   props = my_regionprops(img);
+  %   theta = props.Orientation;
 
-    props = my_regionprops(img);
-    theta = props.Orientation
+  %   if (theta < 40 && theta > -40)
+  %     img_new = imrotate(img, -1*theta, 'Fourier', 'crop');
+  %     % img_new_matrix = imread(img_new);
+  %     training_data(i, 2:end) = reshape(img_new', [1 784]);
+  %   end
+  % end
 
-    if (theta < 40 && theta > -40)
-      img_new = imrotate(img, -1*theta, 'Fourier', 'crop');
-      img_new_matrix = gray2mat(img_new);
-      training_data(i, 2:end) = reshape(img_new_matrix', [1 784]);
-    end
-  end
-
-  save('preprocessed_training.mat', training_data);
+  % save('preprocessed_training.mat', 'training_data');
 
 
 
   test_data = csvread('test.csv', [1,0, 28000,784]); %(:,1) is the actual digit value  
   fprintf('preprocessing test data');
-  for i=1:30000
+  for i=1:28000
     m_orig = reshape(test_data(i, :), [28 28]);
     m = m_orig';
     img = mat2gray(m);
 
     props = my_regionprops(img);
-    theta = props.Orientation
+    theta = props.Orientation;
 
     if (theta < 40 && theta > -40)
       img_new = imrotate(img, -1*theta, 'Fourier', 'crop');
-      img_new_matrix = gray2mat(img_new);
-      test_data(i, :) = reshape(img_new_matrix', [1 784]);
+      % img_new_matrix = gray2mat(img_new);
+      test_data(i, :) = reshape(img_new', [1 784]);
     end
   end
 
-  save('preprocessed_test.mat', test_data);
+  save('preprocessed_test.mat', 'test_data');
 end
 
 %--- begin stackoverflow answer 
