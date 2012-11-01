@@ -23,7 +23,13 @@ function logistic_classifier()
     A = sigmoid(all_theta * X_test');
     [p, ip] = max(A);
 
+<<<<<<< HEAD
+    ip
+
+    csvwrite('logistic_multiclass_results_40iters_nlambda.csv', ip')
+=======
     csvwrite('logistic_multiclass_results_40iters_0point2lambda.csv', ip')
+>>>>>>> Fixed typo in logistic classifier
 end
 
 % function [iter, lambda] = optimizeParameters(X_train, y_train, X_cross, y_cross)
